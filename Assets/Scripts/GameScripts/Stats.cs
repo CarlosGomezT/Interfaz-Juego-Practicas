@@ -8,6 +8,9 @@ public class Stats : MonoBehaviour
     public static bool IsPaused;
     public static int WinCondition;
 
+    //Linea de prueba para Git
+
+//Linea de prueba para Git
     void Start()
     {
         WinCondition = 1;
