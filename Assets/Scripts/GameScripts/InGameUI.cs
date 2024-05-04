@@ -9,6 +9,10 @@ public class InGameUI : MonoBehaviour
     public GameObject WinUI;
     public string levelToLoad = "MainMenu";
 
+    private void Start()
+    {
+        Stats.WinConditionYes += WinUiGame;
+    }
     void Update()
     {
 

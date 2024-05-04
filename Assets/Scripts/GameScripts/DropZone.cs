@@ -87,7 +87,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
             //    WinUiGame();
             //} 
             //
-            UIGame.WinUiGame();
+            Stats.StartWinScreen();
         }
     }
 }

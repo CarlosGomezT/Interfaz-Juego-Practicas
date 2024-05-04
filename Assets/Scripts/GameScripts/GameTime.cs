@@ -7,7 +7,7 @@ public class GameTime : MonoBehaviour
 {
     [SerializeField]
     TextMeshProUGUI timerText;
-    float timeElapsed;
+    public float timeElapsed;
     
     void Update()
     {
