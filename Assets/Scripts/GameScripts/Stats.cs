@@ -12,8 +12,6 @@ public class Stats : MonoBehaviour
     public static event WinEvent WinConditionYes;
 
     //Linea de prueba para Git
-
-    //Linea de prueba para Git
     void Start()
     {
         WinConditionYes = delegate { };

@@ -8,6 +8,7 @@ public class LoadLevelStats : MonoBehaviour
 {
     public ProfileData UserData;
     public TMP_Text RecordPause;
+    public TMP_Text RecordResume;
     public TMP_Text RecordWinScreen;
     public GameTime FinalTime;
     private void Start()
@@ -18,32 +19,46 @@ public class LoadLevelStats : MonoBehaviour
     }
     public void LoadPauseHS()
     {
-        float record = UserData.TotalActividades[1].tiempoRecord;
-        int minutes = Mathf.FloorToInt(record / 60);
-        int seconds = Mathf.FloorToInt(record % 60);
-        RecordPause.text = string.Format("Record : " + DisplayTime(record));
+        float record = UserData.TotalActividades[UICompletedLevels.selectedLevel].tiempoRecord;
+        Debug.Log(UICompletedLevels.selectedLevel);
+
+        if (record == 0)
+        {
+            RecordPause.text = ("No hay record");
+        }
+        else
+        {
+            RecordPause.text = string.Format("Record : " + DisplayTime(record));
+        }
     }
     public void LoadWinxHS()
     {
-        float record = UserData.TotalActividades[1].tiempoRecord;
-        Debug.Log(UserData.TotalActividades[1].tiempoRecord);
+        float record = UserData.TotalActividades[UICompletedLevels.selectedLevel].tiempoRecord;
+        Debug.Log(UserData.TotalActividades[UICompletedLevels.selectedLevel].tiempoRecord);
 
-        int minutes = Mathf.FloorToInt(record / 60);
-        int seconds = Mathf.FloorToInt(record % 60);
-
-        if (record > FinalTime.timeElapsed)
+        if (record > FinalTime.timeElapsed || record == 0)
         {
-            RecordWinScreen.text = string.Format("Nuevo Record : " + DisplayTime(FinalTime.timeElapsed) + "\n Tiempo anterior : " + DisplayTime(record));
+            RecordResume.text = string.Format("Nuevo Record : " + DisplayTime(FinalTime.timeElapsed));
+            if (record == 0)
+            {
+                RecordWinScreen.text = string.Format("Sin record anterior");
+            }
+            else
+            {
+                RecordWinScreen.text = string.Format("Tiempo anterior : " + DisplayTime(record));
+            }
             UpdateRecordTime(FinalTime.timeElapsed);
         }
         else
         {
-            RecordWinScreen.text = string.Format("Record : {0:00}:{1:00}", minutes, seconds);
+            RecordResume.text = string.Format("Completado en: " + DisplayTime(FinalTime.timeElapsed));
+            RecordWinScreen.text = string.Format("Tiempo Record : " + DisplayTime(record));
         }
     }
     public void UpdateRecordTime(float TimeToSave)
     {
-        UserData.TotalActividades[1].tiempoRecord = TimeToSave;
+        UserData.TotalActividades[UICompletedLevels.selectedLevel].tiempoRecord = TimeToSave;
+        UserData.TotalActividades[UICompletedLevels.selectedLevel].terminado = true;
         ProfileStorage.s_currentProfile = UserData;
         ProfileStorage.StoreEditProfile(ProfileStorage.s_currentProfile);
     }
