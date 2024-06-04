@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -13,12 +14,13 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     private float lerpTime = 0.5f; 
     private Vector3 originalPosition; 
-    private bool isDragging = false;
+    public static bool isDragging = true;
     public bool IsForWin;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         DrawManagerScript.WallHit += ReleaseDragItem;
+        
         placeHolder = new GameObject();
         placeHolder.transform.SetParent(this.transform.parent);
         placeHolder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
@@ -36,17 +38,25 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnDrag(PointerEventData eventData)
     {
-        this.transform.position = eventData.position;
-
-        if (placeHolder.transform.parent != placeHolderParent)
+        if (isDragging)
         {
-            placeHolder.transform.SetParent(placeHolderParent);
+            // Actualiza la posición del objeto arrastrado a la posición del puntero
+            this.transform.position = eventData.position;
+
+            // Si el padre del marcador de posición no es el padre esperado, actualízalo
+            if (placeHolder.transform.parent != placeHolderParent)
+            {
+                placeHolder.transform.SetParent(placeHolderParent);
+            }
         }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        ReleaseDragItem();
+        if (isDragging)
+        {
+            ReleaseDragItem();
+        }
     }
 
 
@@ -63,17 +73,17 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             yield return null;
         }
         transform.position = originalPosition;
-        isDragging = false;
     }
 
     private void ReleaseDragItem()
     {
-        DrawManagerScript.WallHit -= ReleaseDragItem;
 
         this.transform.SetParent(returnTo);
         this.transform.SetSiblingIndex(placeHolder.transform.GetSiblingIndex());
         this.GetComponent<CanvasGroup>().blocksRaycasts = true;
+
         Destroy(placeHolder);
+
 
         if (returnTo.CompareTag("DropZone")) 
         {
@@ -83,5 +93,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         {
             StartCoroutine(MoveToOriginalPosition());
         }
+        DrawManagerScript.WallHit -= ReleaseDragItem;
     }
+
 }

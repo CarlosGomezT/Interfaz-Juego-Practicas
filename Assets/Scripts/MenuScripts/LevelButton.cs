@@ -10,13 +10,9 @@ public class LevelButton : MonoBehaviour
     public int Tag;
     public UICompletedLevels UserLevelsDisplay;
     public Image EstrellaTerminado;
-    private void Start()
+    private void Update()
     {
         DisplayCompleted();
-    }
-    public void LoadSelectedLevel()
-    {
-
     }
     public void DisplayCompleted()
     {

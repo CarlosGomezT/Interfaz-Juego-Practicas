@@ -27,7 +27,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
             return;
 
         Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
-        if (d != null && Dropable == true)
+        if (d != null && Dropable == true && Draggable.isDragging==true)
         {
             d.placeHolderParent = this.transform;
 
@@ -44,7 +44,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         if (eventData.pointerDrag == null)
             return;
 
-        if (Dropable == true)
+        if (Dropable == true )
             { 
             Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
             if (d != null && d.placeHolderParent == this.transform)
@@ -62,7 +62,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
     public void OnDrop(PointerEventData eventData) 
     {        
-        if (Dropable == true) 
+        if (Dropable == true && Draggable.isDragging == true) 
         {
             Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
             if (d != null) {
